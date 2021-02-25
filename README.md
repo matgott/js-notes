@@ -9,6 +9,7 @@
 - [lesson-91 - Execution Context](#lesson-91---execution-context)
   - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
   - [Execution Context](#execution-context)
+- [lesson-96 - The this keyword](#lesson-96---the-this-keyword)
 - [lesson-10 - Values and Variables](#lesson-10---values-and-variables)
 - [lesson-12 - Data Types](#lesson-12---data-types)
 - [lesson-13 - let, const and var](#lesson-13---let-const-and-var)
@@ -265,6 +266,31 @@ Example:
 **References**
 
 - [What is the Execution Context & Stack in JavaScript?](https://medium.com/@itIsMadhavan/what-is-the-execution-context-stack-in-javascript-e169812e851a)
+
+---
+
+## lesson-96 - The this keyword
+
+Special variable created for every execution context (function). Points to the "onwer" of the execution context.
+
+`this` isn't static. It depends on how the function is called.
+
+- Method: `this` = Object that is calling the method.
+
+  Example:
+
+      const me = {
+          name: "Matias",
+          year: 1995,
+          calcAge() {
+              return 2021 - `this.year`
+          }
+      }
+      me.calcAge(); // 26
+
+- Simple function call: `this` = undefined (strict mode) or global object.
+- Arrow function: `this` = `this` of parent context: `lexical this`.
+- Event listener: `this` = DOM element that the handler is attached to.
 
 ---
 
