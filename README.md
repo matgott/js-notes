@@ -3,12 +3,12 @@
 ---
 
 - [lesson-90 - Javascript Engine](#lesson-90---javascript-engine)
-  - [Runtime](#runtime)
+    - [Runtime](#runtime)
 - [lesson-92 - Scope](#lesson-92---scope)
 - [lesson-94 - Hoisting](#lesson-94---hoisting)
 - [lesson-91 - Execution Context](#lesson-91---execution-context)
-  - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
-  - [Execution Context](#execution-context)
+    - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
+    - [Execution Context](#execution-context)
 - [lesson-96 - The this keyword](#lesson-96---the-this-keyword)
 - [lesson-10 - Values and Variables](#lesson-10---values-and-variables)
 - [lesson-12 - Data Types](#lesson-12---data-types)
@@ -31,13 +31,14 @@ Program or an interpreter which executes Javascript code. Can be an interpreter 
 
 Steps:
 
-- Parsing: Read the code and parsed into a data structure called `AST (abstract syntax tree`.
+- Parsing: Read the code and parsed into a data structure called `AST (abstract syntax tree)`.
   - Split the code into small pieces with meaning for the language and saving them into the `AST`.
   - Check for syntax errors.
 - Compilation: Takes the generated `ASP` and compiles it to machine code.
 - Execution in the `Call Stack`.
 - Optimization: Some engines performs a unoptimized compilation for executing the code as fast is possible, then in background this code is beign optimized and recompiled. This can be done multiple times.
-- Execution Context Process start.
+
+> Memory Heap: Is where the dynamic data (function, objects, variables definitions) will be stored. The Call Stack only has a reference to the HEAP.
 
 #### Runtime
 
@@ -161,7 +162,7 @@ Where values and expressiones are "visibles" or can be referenced.
 
 - **Lexical Scope**
 
-  Is the scope where a function is defined and that function can access it. Its also called "static scope", is a property in the function `[[Enviroment]]`
+  Defines how variable names are resolved in nested functions: inner functions contain the scope of parent functions
 
 **References**
 
@@ -173,6 +174,8 @@ Where values and expressiones are "visibles" or can be referenced.
 ## lesson-94 - Hoisting
 
 Is a Javascript default behavior of moving all declarations to the top of the current scope. In case of variables only move the declaration, not the assignment.
+
+This happens because at the moment of creating the execution context first all variables are declared.
 
 - **Variables:** Are hoisted and initialized with `undefined`.
 - **Functions:** Formal functions are hoisted and initialized with their function value/reference.
