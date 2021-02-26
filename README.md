@@ -5,11 +5,19 @@
 - [lesson-90 - Javascript Engine](#lesson-90---javascript-engine)
     - [Runtime](#runtime)
 - [lesson-92 - Scope](#lesson-92---scope)
+    - [Block Scope](#block-scope)
+    - [Function Scope/Local Scope](#function-scopelocal-scope)
+    - [Module Scope](#module-scope)
+    - [Global Scope](#global-scope)
+    - [Lexical Scope](#lexical-scope)
 - [lesson-94 - Hoisting](#lesson-94---hoisting)
 - [lesson-91 - Execution Context](#lesson-91---execution-context)
     - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
     - [Execution Context](#execution-context)
 - [lesson-96 - The this keyword](#lesson-96---the-this-keyword)
+- [lesson-99 - Primitives vs Object](#lesson-99---primitives-vs-object)
+    - [Primitives](#primitives)
+    - [Objects](#objects)
 - [lesson-10 - Values and Variables](#lesson-10---values-and-variables)
 - [lesson-12 - Data Types](#lesson-12---data-types)
 - [lesson-13 - let, const and var](#lesson-13---let-const-and-var)
@@ -57,15 +65,15 @@ Where values and expressiones are "visibles" or can be referenced.
 - Child scopes have access to parent scopes, but not vice versa.
 - When a variable isn't in the current scope, the engine looks up in the scope chain. This is calling `variable lookup`.
 
-- **Block Scope**
+#### Block Scope
 
-  Defines a scope for:
+Defines a scope for:
 
-  - `let` and `const` variables.
-  - `Class`
-  - `function` only in strict mode.
+- `let` and `const` variables.
+- `Class`
+- `function` only in strict mode.
 
-  Example:
+Example:
 
       if (true) {
         class Person {
@@ -82,15 +90,15 @@ Where values and expressiones are "visibles" or can be referenced.
       console.log(me); // ReferenceError: me is not defined
       console.log(new Person("Johana")); // ReferenceError: Person is not defined
 
-- **Function Scope/Local Scope**
+#### Function Scope/Local Scope
 
-  Defines a scope for:
+Defines a scope for:
 
-  - `let`, `const` and `var` variables.
-  - `Class`
-  - `function`
+- `let`, `const` and `var` variables.
+- `Class`
+- `function`
 
-  Example:
+Example:
 
       function test() {
           class Person {
@@ -116,17 +124,17 @@ Where values and expressiones are "visibles" or can be referenced.
       console.log(new Person("Johana", 30)); // ReferenceError: Person is not defined
       logNameAndAge(); // ReferenceError: me is not defined
 
-- **Module Scope**
+#### Module Scope
 
-  ES2015/ES6 module creates a scope for:
+ES2015/ES6 module creates a scope for:
 
-  - `let`, `const` and `var` variables.
-  - `functions`
-  - `Class`
+- `let`, `const` and `var` variables.
+- `functions`
+- `Class`
 
-  Example:
+Example:
 
-  `module test.js`
+`module test.js`
 
       class Person {
           constructor(name, age) {
@@ -145,24 +153,24 @@ Where values and expressiones are "visibles" or can be referenced.
       console.log(me); // output: Person { name: 'Matias', age: 25 }
       console.log(birthYear); // output: 1996
 
-  `module app.js`
+`module app.js`
 
       import "./test.js";
 
       console.log(me); // ReferenceError: me is not defined
       console.log(new Person("Johana", 30)); // ReferenceError: Person is not defined
 
-- **Global Scope**
+#### Global Scope
 
-  Is the outermost scope. It is accesible from any inner (local) scope.
+Is the outermost scope. It is accesible from any inner (local) scope.
 
-  **Browser Enviroment:** The global scope is the topmost scope of .js file loadad using `<script>` tag (window object).
+**Browser Enviroment:** The global scope is the topmost scope of .js file loadad using `<script>` tag (window object).
 
-  **Node Enviroment:** The top-level scope is not the global scope. Inside Node.js module a var declaration will be local to that module. It means: the global scope of a module is the module itself.
+**Node Enviroment:** The top-level scope is not the global scope. Inside Node.js module a var declaration will be local to that module. It means: the global scope of a module is the module itself. Node has a `global object` that is accessible within the running process.
 
-- **Lexical Scope**
+#### Lexical Scope
 
-  Defines how variable names are resolved in nested functions: inner functions contain the scope of parent functions
+Defines how variable names are resolved in nested functions: inner functions contain the scope of parent functions
 
 **References**
 
@@ -178,7 +186,7 @@ Is a Javascript default behavior of moving all declarations to the top of the cu
 This happens because at the moment of creating the execution context first all variables are declared.
 
 - **Variables:** Are hoisted and initialized with `undefined`.
-- **Functions:** Formal functions are hoisted and initialized with their function value/reference.
+- **Functions:** Formal functions are hoisted and initialized with their function value.
 - **let - const:** Are hoisted but the cannot be accesed before their declaration. This is called `Temporal dead zone` which start at the begining of the scope until the line where it is defined.
 
 **References**
@@ -193,7 +201,7 @@ Is evaluated as one of the following:
 
 - Global code: Default enviroment where code is executed for the first time.
 - Function code: Function scope.
-- Eval code: Textto be executed inside the internal eval function.
+- Eval code: Text to be executed inside the internal eval function. Call `eval` function generate a new `execution context`.
 
 #### Execution Context Stack / Call Stack
 
@@ -217,9 +225,9 @@ Every call to an `execution context` has 2 stages:
   - Steps:
     - Initialize the `scope chain`.
     - Create the `variable object`.
-    - Create the `arguments object`: Initialize the name and value a creates a reference copy.
+    - Create the `arguments object`: Initialize the name and value and creates a reference copy.
     - Scan the context for function declarations: For each function creates a property in the `variable object` which has a reference pointer to the function in memory. If the function exists already, pointer value will be overwritten.
-    - Scan the context for variable declarations: For each variable creates a property in the `variable object` and initialize the value as `undefined`. If the name already exists in the `variable object`, do nothin and continue scanning.
+    - Scan the context for variable declarations: For each variable creates a property in the `variable object` and assign a memory address for it. Then initialize the value as `undefined` (or `uninitialized` for `let` and `const`). If the name already exists in the `variable object`, do nothin and continue scanning.
     - Determine the value of `this`.
 - ##### Activation / Code Execution Stage: Run the code in the context and assign variable values as the code is executed line by line.
 
@@ -274,7 +282,7 @@ Example:
 
 ## lesson-96 - The this keyword
 
-Special variable created for every execution context (function). Points to the "onwer" of the execution context.
+Special variable created for every execution context (function). Refers to the object who call the function.
 
 `this` isn't static. It depends on how the function is called.
 
@@ -294,6 +302,26 @@ Special variable created for every execution context (function). Points to the "
 - Simple function call: `this` = undefined (strict mode) or global object.
 - Arrow function: `this` = `this` of parent context: `lexical this`.
 - Event listener: `this` = DOM element that the handler is attached to.
+
+---
+
+## lesson-99 - Primitives vs Object
+
+#### Primitives
+
+Primitive types are stored in the `call stack`, inside the execution context that they are declared.
+
+When a primitive is declared a memory address is asigned to it, and save the value in that address. (This happen in the `Call Stack`).
+
+If the variable primitive value changes, a new memory address is created for that value and memory will point to that new address.
+
+#### Objects
+
+All objects will get stored in the `Memory Heap`.
+When an Object is declared it will be created in the `Heap` in a specific `address`.
+In the `Call stack` an identifier is created pointing to the `Heap Address` that contains the object.
+When a change is made on the object, that happen in the `Heap`, nothin change in the `Call Stack`.
+If we create a new variable equal to an existing object an indentifier will be created in the `Call stack` pointing to the same `Heap Address` created before. For this reason if we made a change to this object through this identifier (variable) the same object in the `Heap` is modified, and both identifiers are pointing to the same `Heap Address`.
 
 ---
 
