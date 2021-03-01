@@ -3,21 +3,21 @@
 ---
 
 - [lesson-90 - Javascript Engine](#lesson-90---javascript-engine)
-    - [Runtime](#runtime)
+  - [Runtime](#runtime)
 - [lesson-92 - Scope](#lesson-92---scope)
-    - [Block Scope](#block-scope)
-    - [Function Scope/Local Scope](#function-scopelocal-scope)
-    - [Module Scope](#module-scope)
-    - [Global Scope](#global-scope)
-    - [Lexical Scope](#lexical-scope)
+  - [Block Scope](#block-scope)
+  - [Function Scope/Local Scope](#function-scopelocal-scope)
+  - [Module Scope](#module-scope)
+  - [Global Scope](#global-scope)
+  - [Lexical Scope](#lexical-scope)
 - [lesson-94 - Hoisting](#lesson-94---hoisting)
 - [lesson-91 - Execution Context](#lesson-91---execution-context)
-    - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
-    - [Execution Context](#execution-context)
+  - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
+  - [Execution Context](#execution-context)
 - [lesson-96 - The this keyword](#lesson-96---the-this-keyword)
 - [lesson-99 - Primitives vs Object](#lesson-99---primitives-vs-object)
-    - [Primitives](#primitives)
-    - [Objects](#objects)
+  - [Primitives](#primitives)
+  - [Objects](#objects)
 - [lesson-10 - Values and Variables](#lesson-10---values-and-variables)
 - [lesson-12 - Data Types](#lesson-12---data-types)
 - [lesson-13 - let, const and var](#lesson-13---let-const-and-var)
@@ -28,6 +28,14 @@
 - [lesson-30 - JavaScript Releases](#lesson-30---javascript-releases)
 - [lesson-32 - Strict Mode](#lesson-32---strict-mode)
 - [lesson-33-34 - Functions](#lesson-33-34---functions)
+- [lesson-103-104 - Destructuring](#lesson-103-104---destructuring)
+  - [**Array**](#array)
+  - [**Objects**](#objects-1)
+- [lesson-105 - Spread Operator](#lesson-105---spread-operator)
+- [lesson-106 - Rest Syntax](#lesson-106---rest-syntax)
+- [lesson-107 - Short Circuiting (|| - &&)](#lesson-107---short-circuiting----)
+  - [OR (||)](#or-)
+  - [AND (&&)](#and-)
 
 ---
 
@@ -566,3 +574,155 @@ Example:
     **References**: [MDN Arrow Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
 ---
+
+## lesson-103-104 - Destructuring
+
+Definition: Expression to unpack values from arrays, or properties from objects into distinct variables.
+
+#### **Array**
+
+Retrieve elements from the array and store them into variables.
+
+    const arr = [2, 3, 4];
+    const [a, b, c] = arr;
+    console.log(a, b, c); // 2, 3, 4
+
+Skip elements:
+
+    const arr = [2, 3, 4];
+    const [a, , b] = arr;
+    console.log(a, b); // 2, 4
+
+Invert elements:
+
+    const arr = [2, 3, 4];
+    let [a, b] = arr;
+    console.log(a, b); // 2, 3
+
+    [a, b] = [b, a]
+    console.log(a, b); // 3, 2
+
+Nested destructuring:
+
+    const arr = [2, 3, 4, [5, 6]];
+    const [a, , b, c] = arr;
+    console.log(a, b, c); // 2, 4, [5,6]
+    const [d, , e, [f, g]] = arr;
+    console.log(d, e, f, g); // 2, 4, 5, 6
+
+Default values:
+
+    const arr = [8, 9];
+    const [a, b, c] = arr;
+    console.log(a, b, c); // 8, 9, undefined
+    const [d, e = 1, f = 10] = arr;
+    console.log(d, e, f); // 8, 9, 10
+
+#### **Objects**
+
+    const obj = {
+        name: "Matias",
+        lastname: "Caloia",
+        address: {
+            street: "Viamonte",
+            number: 449,
+            city: {
+                country: "Argentina",
+                state: "Santa Fe",
+                city: "Rafaela"
+            }
+        },
+    };
+
+Retrieve properties from the object and store their values into variables.
+
+    const {name, lastname, address} = obj;
+    console.log(name, lastname, address); // Matias Caloia { street: 'Viamonte', number: 449 }
+
+Change variable name:
+
+    const { name: myName, lastname: myLastname, address: myLocation } = obj;
+    console.log(myName, myLastname, myLocation); // Matias Caloia { street: 'Viamonte', number: 449 }
+
+Default values:
+
+    const { phoneNumbers = [], name: myName, lastname } = obj;
+    console.log(phoneNumbers, myName, lastname); // [] Matias Caloia
+
+Mutating variables:
+
+    let name;
+    let lastname;
+    ({ name, lastname } = obj);
+    console.log(name, lastname); // Matias Caloia
+
+Nested objects:
+
+    const {
+        address: {street, number: streetNumber},
+    } = obj;
+    console.log(street, streetNumber); // Viamonte 449
+
+---
+
+## lesson-105 - Spread Operator
+
+Allow us to expand an `Iterable: array, string, map, set` into all of its inidividual elements.
+
+    const arr = [3, 4, 5];
+    const newArr = [1, 2, ...arr];
+    const newArr2 = [...arr, 1, 2];
+    const newArr3 = [1, ...arr, 2];
+    console.log(newArr, newArr2, newArr3); // [1, 2, 3, 4, 5] [3, 4, 5, 1, 2] [1, 3, 4, 5, 2]
+    console.log(...newArr); // 1, 2, 3, 4, 5
+
+Since ES2018/ES9 also works on Objects (Be careful, it's a SHALLOW copy)
+
+    const obj = {
+    name: "Matias",
+    };
+    const newObj = {...obj, lastname: "Caloia"};
+    console.log(newObj); // { name: 'Matias', lastname: 'Caloia' }
+
+---
+
+## lesson-106 - Rest Syntax
+
+Pack individual elements into an array
+
+    function sum(...numbers) {
+        return numbers.reduce((acc, current) => acc + current);
+    }
+    console.log(sum(3, 3, 4, 10, 5)); // 25
+
+    const arr = [1, 2, 3, 4, 5];
+    const [a, b, ...others] = arr;
+    console.log(a, b, others); // 1, 2, [3, 4, 5]
+
+---
+
+## lesson-107 - Short Circuiting (|| - &&)
+
+An expression with logical operators (|| - &&) is evaluated from left to right.
+
+#### OR (||)
+
+Return the first true value. And will reutrn the las `false` value if all the values are falsy.
+
+    true || false
+    > true
+
+    console.log(undefined || "Matias" || "This will not evaluated"); // Matias
+
+#### AND (&&)
+
+Return `false` as soon as it gets any [falsy value](#lesson-21---truthy-and-falsy-values). And will reutrn the las `true` value if all the values are truthy.
+
+    false && true
+    > false
+
+    true && "Matias" && "Caloia"
+    > Caloia
+
+    true && "" && "Matias"
+    > false
