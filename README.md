@@ -36,6 +36,7 @@
 - [lesson-107 - Short Circuiting (|| - &&)](#lesson-107---short-circuiting----)
   - [OR (||)](#or-)
   - [AND (&&)](#and-)
+- [lesson-108 - Nullish Coalescing Operator](#lesson-108---nullish-coalescing-operator)
 
 ---
 
@@ -726,3 +727,20 @@ Return `false` as soon as it gets any [falsy value](#lesson-21---truthy-and-fals
 
     true && "" && "Matias"
     > false
+
+---
+
+## lesson-108 - Nullish Coalescing Operator
+
+Introduced in ES2020/ES9.
+
+Logical operator that returns its right-hand side operand when its left-hand side operador is `null` or `undefined`.
+
+    const name = null ?? "Matias";
+    console.log(name); // Matias
+
+    const lastname = undefined ?? "Caloia";
+    console.log(lastname); // Caloia
+
+    const age = 0 ?? 25;
+    console.log(age); // 0
