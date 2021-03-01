@@ -23,20 +23,23 @@
 - [lesson-13 - let, const and var](#lesson-13---let-const-and-var)
 - [lesson-20 - Type Conversion and Coercion](#lesson-20---type-conversion-and-coercion)
 - [lesson-21 - Truthy and Falsy Values](#lesson-21---truthy-and-falsy-values)
+- [Nullish value](#nullish-value)
+  - [Null vs Undefined](#null-vs-undefined)
 - [lesson-22 - Equality Operators: == vs ===](#lesson-22---equality-operators--vs-)
 - [lesson-27 - Statements & Expressions](#lesson-27---statements--expressions)
 - [lesson-30 - JavaScript Releases](#lesson-30---javascript-releases)
 - [lesson-32 - Strict Mode](#lesson-32---strict-mode)
 - [lesson-33-34 - Functions](#lesson-33-34---functions)
 - [lesson-103-104 - Destructuring](#lesson-103-104---destructuring)
-  - [**Array**](#array)
-  - [**Objects**](#objects-1)
+  - [Array](#array)
+  - [Objects](#objects-1)
 - [lesson-105 - Spread Operator](#lesson-105---spread-operator)
 - [lesson-106 - Rest Syntax](#lesson-106---rest-syntax)
 - [lesson-107 - Short Circuiting (|| - &&)](#lesson-107---short-circuiting----)
   - [OR (||)](#or-)
   - [AND (&&)](#and-)
-- [lesson-108 - Nullish Coalescing Operator](#lesson-108---nullish-coalescing-operator)
+- [lesson-108 - Nullish Coalescing Operator (??)](#lesson-108---nullish-coalescing-operator-)
+- [Optional Chaining (?)](#optional-chaining-)
 
 ---
 
@@ -451,6 +454,30 @@ Type Coercion: Javascript automatically convert behind the scenes for us.
 
 ---
 
+## Nullish value
+
+`null` or `undefined`
+
+#### Null vs Undefined
+
+`null` is an assigned value. It means `nothing`.
+
+`undefined` typically means a variable has been declared but not defined.
+
+Both are [primitives](#primitives) and [falsy values](#lesson-21---truthy-and-falsy-values)
+
+    console.log(typeof null); // "object" (not "null" for legacy reasons)
+    console.log(typeof undefined); // "undefined"
+    console.log(null === undefined); // false
+    console.log(null == undefined); // true
+    console.log(null === null); // true
+    console.log(null == null); // true
+    console.log(!null); // true
+    console.log(isNaN(1 + null)); // false
+    console.log(isNaN(1 + undefined)); // true
+
+---
+
 ## lesson-22 - Equality Operators: == vs ===
 
 **Equality operator ==:** Checks whether its two oeprands are equal. It attempts to convert and compare operands that are of differentes types (Coercion).
@@ -580,7 +607,7 @@ Example:
 
 Definition: Expression to unpack values from arrays, or properties from objects into distinct variables.
 
-#### **Array**
+#### Array
 
 Retrieve elements from the array and store them into variables.
 
@@ -619,7 +646,7 @@ Default values:
     const [d, e = 1, f = 10] = arr;
     console.log(d, e, f); // 8, 9, 10
 
-#### **Objects**
+#### Objects
 
     const obj = {
         name: "Matias",
@@ -730,7 +757,7 @@ Return `false` as soon as it gets any [falsy value](#lesson-21---truthy-and-fals
 
 ---
 
-## lesson-108 - Nullish Coalescing Operator
+## lesson-108 - Nullish Coalescing Operator (??)
 
 Introduced in ES2020/ES9.
 
@@ -744,3 +771,27 @@ Logical operator that returns its right-hand side operand when its left-hand sid
 
     const age = 0 ?? 25;
     console.log(age); // 0
+
+---
+
+## Optional Chaining (?)
+
+Check if the left reference is `nullish` and short-circuits with a return value of `undefined`.
+
+    const obj = {
+    info: {
+        name: "Matias",
+        lastname: "Caloia",
+        phones: [{area: "3492", number: "311853"}],
+    },
+    sayName() {
+        return `My name is ${this.info.name} ${this.info.lastname}`;
+    },
+    };
+
+    console.log(obj.info?.name); // Matias
+    console.log(obj.data?.lastname); // undefined
+    console.log(obj.info.phones[0]?.area); // 3492
+    console.log(obj.info.phones[1]?.area); // undefined
+    console.log(obj.sayName?.() ?? "Method does not exist"); // My name is Matias Caloia
+    console.log(obj.sayAge?.() ?? "Method does not exist"); //Method does not exist
