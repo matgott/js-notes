@@ -3,43 +3,53 @@
 ---
 
 - [lesson-90 - Javascript Engine](#lesson-90---javascript-engine)
-  - [Runtime](#runtime)
+    - [Runtime](#runtime)
 - [lesson-92 - Scope](#lesson-92---scope)
-  - [Block Scope](#block-scope)
-  - [Function Scope/Local Scope](#function-scopelocal-scope)
-  - [Module Scope](#module-scope)
-  - [Global Scope](#global-scope)
-  - [Lexical Scope](#lexical-scope)
+    - [Block Scope](#block-scope)
+    - [Function Scope/Local Scope](#function-scopelocal-scope)
+    - [Module Scope](#module-scope)
+    - [Global Scope](#global-scope)
+    - [Lexical Scope](#lexical-scope)
 - [lesson-94 - Hoisting](#lesson-94---hoisting)
 - [lesson-91 - Execution Context](#lesson-91---execution-context)
-  - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
-  - [Execution Context](#execution-context)
+    - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
+    - [Execution Context](#execution-context)
 - [lesson-96 - The this keyword](#lesson-96---the-this-keyword)
 - [lesson-99 - Primitives vs Object](#lesson-99---primitives-vs-object)
-  - [Primitives](#primitives)
-  - [Objects](#objects)
+    - [Primitives](#primitives)
+    - [Objects](#objects)
 - [lesson-10 - Values and Variables](#lesson-10---values-and-variables)
 - [lesson-12 - Data Types](#lesson-12---data-types)
 - [lesson-13 - let, const and var](#lesson-13---let-const-and-var)
 - [lesson-20 - Type Conversion and Coercion](#lesson-20---type-conversion-and-coercion)
 - [lesson-21 - Truthy and Falsy Values](#lesson-21---truthy-and-falsy-values)
 - [Nullish value](#nullish-value)
-  - [Null vs Undefined](#null-vs-undefined)
+    - [Null vs Undefined](#null-vs-undefined)
 - [lesson-22 - Equality Operators: == vs ===](#lesson-22---equality-operators--vs-)
 - [lesson-27 - Statements & Expressions](#lesson-27---statements--expressions)
 - [lesson-30 - JavaScript Releases](#lesson-30---javascript-releases)
 - [lesson-32 - Strict Mode](#lesson-32---strict-mode)
 - [lesson-33-34 - Functions](#lesson-33-34---functions)
+    - [Closure](#closure)
 - [lesson-103-104 - Destructuring](#lesson-103-104---destructuring)
-  - [Array](#array)
-  - [Objects](#objects-1)
+    - [Array](#array)
+    - [Objects](#objects-1)
 - [lesson-105 - Spread Operator](#lesson-105---spread-operator)
 - [lesson-106 - Rest Syntax](#lesson-106---rest-syntax)
 - [lesson-107 - Short Circuiting (|| - &&)](#lesson-107---short-circuiting----)
-  - [OR (||)](#or-)
-  - [AND (&&)](#and-)
+    - [OR (||)](#or-)
+    - [AND (&&)](#and-)
 - [lesson-108 - Nullish Coalescing Operator (??)](#lesson-108---nullish-coalescing-operator-)
 - [Optional Chaining (?)](#optional-chaining-)
+- [lesson-115 - Sets](#lesson-115---sets)
+    - [Examples](#examples)
+    - [Practical cases:](#practical-cases)
+- [lesson-116-117 - Maps](#lesson-116-117---maps)
+    - [Examples](#examples-1)
+    - [Iteration](#iteration)
+- [lesson-118 - Which Data Structure to Use](#lesson-118---which-data-structure-to-use)
+    - [Arrays or Sets](#arrays-or-sets)
+    - [Objects or Maps](#objects-or-maps)
 
 ---
 
@@ -601,6 +611,12 @@ Example:
 
     **References**: [MDN Arrow Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
+#### Closure
+
+A `closure` is the combination of a function bundled together with references to its lexical environment. A closure gives you access to an outer function's scope from a inner function.
+
+In Javascript a closure is created every time a function is created
+
 ---
 
 ## lesson-103-104 - Destructuring
@@ -795,3 +811,175 @@ Check if the left reference is `nullish` and short-circuits with a return value 
     console.log(obj.info.phones[1]?.area); // undefined
     console.log(obj.sayName?.() ?? "Method does not exist"); // My name is Matias Caloia
     console.log(obj.sayAge?.() ?? "Method does not exist"); //Method does not exist
+
+---
+
+## lesson-115 - Sets
+
+Collection of unique values of any type, whether primitive values or object references.
+
+Loop is similar to other Iterables.
+
+Isn't possible to retrieve a value from a Set.
+
+    const mySet = new Set();
+    mySet.add("Matias");
+    mySet.add("Caloia");
+    mySet.add("Matias");
+    console.log(mySet); // Set(2) { 'Matias', 'Caloia' }
+
+#### Examples
+
+`From iterable`:
+
+    const mySet = new Set([1, 2, 3, 3, 4, 5]);
+    console.log(mySet); // Set(5) { 1, 2, 3, 4, 5 }
+
+    const mySet = new Set("Matias");
+    console.log(mySet); // Set(5) { 'M', 'a', 't', 'i', 's' }
+
+`Methods`:
+
+    const mySet = new Set(["Matias", "Nicolas", "Matias", "Caloia", 25, 1995]);
+    console.log(mySet.size); // 5
+    console.log(mySet.has("Matias")); // true
+    console.log(mySet.has("October")); // false
+
+    mySet.add("October");
+    console.log(mySet); // Set(6) { 'Matias', 'Nicolas', 'Caloia', 25, 1995, 'October' }
+
+    mySet.delete("Nicolas");
+    console.log(mySet); // Set(5) { 'Matias', 'Caloia', 25, 1995, 'October' }
+
+    mySet.clear();
+    console.log(mySet); // Set(0) {}
+
+#### Practical cases:
+
+`Remove duplicates from array:`
+
+    const team = [
+    "Developer",
+    "Team Lider",
+    "Technical Lider",
+    "Project Manager",
+    "Developer",
+    ];
+    const uniqueTeam = [...new Set(team)];
+    console.log(uniqueTeam); // [ 'Developer', 'Team Lider', 'Technical Lider', 'Project Manager' ]
+
+---
+
+## lesson-116-117 - Maps
+
+Data structure that can we used to map values to keys. The differce with an Object is that in `Map` the key can be of any type: String, Boolean, Object, etc.
+
+Calling the `set` method always return the updated `Map`.
+
+#### Examples
+
+    const rest = new Map();
+    rest
+    .set("categories", ["Talian", "Pizzeria", "Vegetarian", "Organic"])
+    .set("open", 11)
+    .set("close", 23)
+    .set(true, "We are open")
+    .set(false, "We are closed");
+
+    console.log(rest.size); // 5
+
+    console.log(rest);
+    // Map(5) {
+    //   'categories' => [ 'Talian', 'Pizzeria', 'Vegetarian', 'Organic' ],
+    //   'open' => 11,
+    //   'close' => 23,
+    //   true => 'We are open',
+    //   false => 'We are closed'
+    // }
+
+    console.log(rest.get("categories")); // [ 'Talian', 'Pizzeria', 'Vegetarian', 'Organic' ]
+    console.log(rest.get(true)); // We are open
+    console.log(rest.get(1)); // undefined
+
+    console.log(rest.has("categories")); // true
+
+    rest.delete("close");
+
+    const arr = [2, 3];
+    rest.set([1, 2], "Test");
+    rest.set(arr, "Test 2");
+
+    console.log(rest);
+    // Map(5) {
+    //   'categories' => [ 'Talian', 'Pizzeria', 'Vegetarian', 'Organic' ],
+    //   'open' => 11,
+    //   true => 'We are open',
+    //   false => 'We are closed',
+    //   [ 1, 2 ] => 'Test'
+    // }
+
+    console.log(rest.get([1, 2])); // undefined -> Not same array
+    console.log(rest.get(arr)); // Test 2
+
+#### Iteration
+
+    const question = new Map([
+    ["question", "What is the best programming language in the world?"],
+    [1, "C"],
+    [2, "Java"],
+    [3, "JavaScript"],
+    ["correct", 3],
+    [true, "Correct 🙌"],
+    [false, "Nope! 😢"],
+    ]);
+
+    console.log(question.get("question"));
+    for (const [key, value] of question) {
+    if (typeof key === "number") console.log(`Answer: ${key}: ${value}`);
+    }
+    // What is the best programming language in the world?
+    // Answer: 1: C
+    // Answer: 2: Java
+    // Answer: 3: JavaScript
+
+    // User input: 2
+    console.log(question.get(question.get("correct") === 2)); // Nope! 😢
+    // User input: 3
+    console.log(question.get(question.get("correct") === 3)); // Correct 🙌
+
+---
+
+## lesson-118 - Which Data Structure to Use
+
+#### Arrays or Sets
+
+We just need a list of values, without description.
+
+Array
+
+- You need `ordered` list of values that might contain duplicates.
+- You need manipulate data.
+
+Set:
+
+- You need `unique` values.
+- Use when `high-performance` is important. Search & delete operation are fasters than in array.
+- Use to `remove duplicates` from arrays.
+
+#### Objects or Maps
+
+If we need describing values we can use key value pair.
+
+Object:
+
+- More `traditional` key/value store.
+- Easier to write and access values with . and [] notations.
+  > Use wheen you need to include functions (methods) and when you are working with JSON
+
+Maps:
+
+- Better `performance`.
+- Keys can have `any` data type.
+- Easy to iterate.
+- Easy to compute size.
+  > Use when you simply need to map key -> values and when you need keys that are not string
