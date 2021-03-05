@@ -50,6 +50,20 @@
 - [lesson-118 - Which Data Structure to Use](#lesson-118---which-data-structure-to-use)
     - [Arrays or Sets](#arrays-or-sets)
     - [Objects or Maps](#objects-or-maps)
+- [lesson-203 - OOP](#lesson-203---oop)
+    - [Classes](#classes)
+    - [Instance](#instance)
+    - [How do we design classes?](#how-do-we-design-classes)
+- [lesson-204 - OOP in Javascript](#lesson-204---oop-in-javascript)
+    - [lesson-205-206-207 Prototype](#lesson-205-206-207-prototype)
+    - [How do we implement OOP in Javascript?](#how-do-we-implement-oop-in-javascript)
+    - [`new` Operator](#new-operator)
+    - [Prototyping](#prototyping)
+    - [Prototype Chain](#prototype-chain)
+    - [ES6 Classes](#es6-classes)
+      - [Getters & Setters](#getters--setters)
+      - [Static Methods](#static-methods)
+    - [Object.create](#objectcreate)
 
 ---
 
@@ -209,7 +223,7 @@ This happens because at the moment of creating the execution context first all v
 
 - **Variables:** Are hoisted and initialized with `undefined`.
 - **Functions:** Formal functions are hoisted and initialized with their function value.
-- **let - const:** Are hoisted but the cannot be accesed before their declaration. This is called `Temporal dead zone` which start at the begining of the scope until the line where it is defined.
+- **let - const & Classes:** Are hoisted but the cannot be accesed before their declaration. This is called `Temporal dead zone` which start at the begining of the scope until the line where it is defined.
 
 **References**
 
@@ -983,3 +997,250 @@ Maps:
 - Easy to iterate.
 - Easy to compute size.
   > Use when you simply need to map key -> values and when you need keys that are not string
+
+---
+
+## lesson-203 - OOP
+
+`Paradigm` based on the concept of objects.
+
+> Paradigm is style of code, how we write and organize code.
+
+- Use object to model (describe) real-world or abstract features.
+- Object may contain properties & methods (Data & behavior). By using objects we pack that data and behavior into one block.
+- Objects interacts with one another.
+  - Through methods that the code outside of the object can access and use to communicate with it.
+
+#### Classes
+
+Are templates for creating objects. We defined the propeties and the methods that the objects will have.
+
+#### Instance
+
+Is a real object of a particular `Class` with the data and the methods. You can have multiple instances of a same `Class`.
+
+#### How do we design classes?
+
+Based on 5 principes:
+
+- Abstraction: Ignoring or hiding details that don't matter.
+- Encapsulation: Keeping properties and methods private inside the class, exposing only the necessary parts to prevent external code accidentally manipulating internal state and allowing us to change internal implementation without breaking external code.
+- Inheritance: Avoid duplicate code. A `Class` can extends from another, accesing to their properties and methods and also add new ones.
+- Polymorphism: A `child class` can overwrite a method it inherited from a parent, changing their own behavior.
+
+## lesson-204 - OOP in Javascript
+
+#### lesson-205-206-207 Prototype
+
+All objects in Javascript are linked to a certain `prototype object`. Each object has a prototype.
+
+`Prototype` object contains methods and properties that all the objects that are linked to that `prototype` can access and use.
+
+> This is called **Prototypal Inheritance**: All objects that are linked to a certain prototype object can use the methods and properties that are defined on that prototype
+
+This mecanism we call it `delegation`: Objects `delegate` behavior to the linked prototype object.
+
+I classical OOP with classes inheritance the behavior is copied from the class to the object, this is different that `delegate` behavior.
+
+#### How do we implement OOP in Javascript?
+
+- Constructor function:
+  - Create objects from a function. (Arrays, Maps or Sets are actually implemented like this)
+- ES6 Classes:
+  - Modern alternative to constructor.
+  - Syntactic sugar of Constructor function: Behind the scenes ES6 classes work exactly like constructor functions.
+- Object.create()
+
+#### `new` Operator
+
+1. An empty object is created.
+2. Function is called -> The `this` keyword points to the empty object created.
+3. Empty object is linked to prototype. (.**proto** property)
+4. Function automatically return the object.
+
+#### Prototyping
+
+    const Person = function (name, age) {
+        this.name = name;
+        this.age = age;
+
+        //This is a bad practice because every object instanced of this
+        //constructor function will be copied this function afecting
+        // our code performance
+        this.sayName = function () {
+            console.log(`My name is ${this.name}`);
+        };
+    };
+
+Instead, we uso prototype property of constructor function to avoid duplicate code:
+
+    const Person = function (name, age) {
+        this.name = name;
+        this.age = age;
+    };
+
+    Person.prototype.sayName = function () {
+        console.log(`My name is ${this.name}`);
+    };
+
+    Person.prototype.species = "Homo Sapiens";
+
+    const me = new Person("Matias", 25);
+    me.sayName(); // Matias
+    console.log(me.species); // Homo Sapiens
+
+Person.prototype means that all the objects that are created from the Person constructor functions gonna have that prototype BUT this doesn't mean which that prototype is a Person prototype. Prototype belongs to the object not the constructor function:
+
+    console.log(Person.prototype.isPrototypeOf(me)); // true
+    console.log(Person.prototype.isPrototypeOf(Person)); // false
+
+#### Prototype Chain
+
+The object ant it's prototype form a prototype chain.
+
+But also the Prototype is an Object and Object has it own protype: `Object.prototype` because Object are created by the `Object constructor function` behind the scenes. And the prototype of that Object is `null`.
+
+So, the prototype chain is: the prototype of the instaced object plus the `Object prototype`.
+
+---
+
+#### ES6 Classes
+
+Are `syntatic sugar` for prototype. This two examples are the same:
+
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        sayName() {
+            console.log(`My name is ${this.age}`);
+        }
+    }
+
+    console.log(Person.prototype);
+    {…}
+        constructor: class Person { constructor(name, age) }
+        sayName: function sayName()
+        <prototype>: Object { … }
+
+Or
+
+    function Person(name, age) {
+        this.name = name;
+        this.age = age
+    }
+
+    Person.prototype.sayName = function() {
+        console.log(`My name is ${this.age}`);
+    }
+
+    console.log(Person.prototype);
+    {…}
+        constructor: function Person(name, age)
+        sayName: function sayName()
+        <prototype>: Object { … }
+
+##### Getters & Setters
+
+This sintax binds a property to a function to be called when the property is called o trying to be set.
+
+    class Person {
+        constructor(firstName, lastName, age) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.age = age;
+        }
+
+        get fullName() {
+            return `${this.firstName} ${this.lastName}`;
+        }
+
+        set fullName(name) {
+            const [firstName, ...lastName] = name.split(" ");
+            this.firstName = firstName;
+            this.lastName = lastName.join(" ");
+
+            return this.fullname;
+        }
+
+        set age(age) {
+            if (age > 0 && age < 130) {
+            // this.age = age;
+            this._age = age;
+            } else {
+            console.log(`${age} is not a valid age`);
+            }
+        }
+
+        get age() {
+            return this._age;
+        }
+    }
+
+> If we use a setter with the same name as a property, we need to create a new property and a get for that property (This is by convention).
+
+##### Static Methods
+
+`static` keyword defines a static method or property for a class. This methods or properties cannot be called on instances of the class. **They are called on the class constructor itself**.
+
+`Prototype example`
+
+Function hey is attach to the constructor function not to the prototype, so object of Person does not inherit that behavior.
+
+    const Person = function (name, age) {
+        this.name = name;
+        this.age = age;
+    };
+
+    Person.hey = function () {
+        console.log("Hey there!");
+    };
+
+    Person.hey(); // Hey there!
+
+    const me = new Person("Matias", 25);
+    console.log(me.hey()); // TypeError: me.hey is not a function
+
+`Class example`
+
+    Class works like prototype so what happen is the same:
+
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        sayName() {
+            console.log(`My name is ${this.name} ${this.age}`);
+        }
+
+        static hey() {
+            console.log("Hey there!");
+        }
+    }
+
+    Person.hey(); // Hey there!
+
+    const me = new Person("Matias", 25);
+    console.log(me.hey()); // TypeError: me.hey is not a function
+
+#### Object.create
+
+We can use `Object.create` to manually set the prototype of an object, to any other object that we want.
+
+    const PersonProto = {
+        init(name, age) {
+            this.name = name;
+            this.age = age;
+        },
+        sayName() {
+            console.log(`My name is ${this.name}`);
+        },
+    };
+
+    const me = Object.create(PersonProto);
+    me.init("Matias", 25);
+    me.sayName(); // My name is Matias
