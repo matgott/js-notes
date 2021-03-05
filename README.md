@@ -1231,6 +1231,8 @@ Function hey is attach to the constructor function not to the prototype, so obje
 
 We can use `Object.create` to manually set the prototype of an object, to any other object that we want.
 
+The difference with the `New` operator is that `Object.create` does not call any constructor function.
+
     const PersonProto = {
         init(name, age) {
             this.name = name;
