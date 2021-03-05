@@ -60,7 +60,7 @@
     - [`new` Operator](#new-operator)
     - [Prototyping](#prototyping)
     - [Prototype Chain](#prototype-chain)
-    - [ES6 Classes](#es6-classes)
+    - [lessson-210-211-212 - ES6 Classes](#lessson-210-211-212---es6-classes)
       - [Getters & Setters](#getters--setters)
       - [Static Methods](#static-methods)
     - [Object.create](#objectcreate)
@@ -1096,7 +1096,7 @@ Person.prototype means that all the objects that are created from the Person con
 
 #### Prototype Chain
 
-The object ant it's prototype form a prototype chain.
+The object and it's prototype form a prototype chain.
 
 But also the Prototype is an Object and Object has it own protype: `Object.prototype` because Object are created by the `Object constructor function` behind the scenes. And the prototype of that Object is `null`.
 
@@ -1104,7 +1104,7 @@ So, the prototype chain is: the prototype of the instaced object plus the `Objec
 
 ---
 
-#### ES6 Classes
+#### lessson-210-211-212 - ES6 Classes
 
 Are `syntatic sugar` for prototype. This two examples are the same:
 
