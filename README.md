@@ -68,6 +68,9 @@
   - [Garbage Collection Stragegies](#garbage-collection-stragegies)
     - [Reference Counting](#reference-counting)
     - [Mark-and-sweep](#mark-and-sweep)
+- [Optimization](#optimization)
+  - [Hidden Class](#hidden-class)
+  - [Inline Cache](#inline-cache)
 
 ---
 
@@ -1306,3 +1309,87 @@ The algorith will go a couple of times, from the root to the bottom objects `mar
 
 - [JavaScript Internals: Garbage Collection](https://blog.appsignal.com/2020/10/21/garbage-collection-in-javascript.html)
 - [A Deep Dive Into V8](https://blog.appsignal.com/2020/07/01/a-deep-dive-into-v8.html)
+
+---
+
+## Optimization
+
+#### Hidden Class
+
+V8 use `Hidden classes` to store the memory location of objects properties.
+
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    const p1 = new Point(1,2);
+
+When the new Point() invocation happens, V8 will create a empty `hidden class` (C0) for that object.
+
+    p1: A Point object
+
+    C0: {
+        Initial hidden class
+    }
+
+Once first property assigment is executed inside the Point function, V8 will create a second `hidden class`(C1) based on C0. C1 describes the location in the memory where property `x` can be found.
+
+V8 will also update C0 with a `class transition` which states that if a property `x` is added to a Point object, hidden class should switch to C1.
+
+    p1: A Point object
+
+    C0: {
+        Initial hidden class
+        x: Class transition to C1
+    }
+
+    C1: {
+        x: offset 0
+    }
+
+For each property assigment execution on the Point function the same process will be started. For example, for property `y` V8 will create a new hidden class (C2) and add a `class transition` on C1 that indicates for property `y` on Point object hidden class should switch to C2:
+
+    p1: A Point object
+
+    C0: {
+        Initial hidden class
+        x: Class transition to C1
+    }
+
+    C1: {
+        x: offset 0
+        y: class transition to C2
+    }
+
+    C2: {
+        x: ofsset 0
+        y: offset 1
+    }
+
+Is important that all Point objects properties are initialized in the same order always so the hidden class can be shared between all Point objects. If several Point objects properties are initialized in different order, new hidden classes will be created for each one. Fox example, avoid this:
+
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    const p1 = new Point(1, 2);
+    p1.a = 5;
+    p1.b = 6;
+
+    const p2 = new Point(3, 4);
+    p2.b = 7;
+    p2.a = 8;
+
+#### Inline Cache
+
+Inline caching relies on the observation that repeated calls to the same method tend to occur on the same type of object (Same Hidden Class).
+
+V8 maintains a cache of the type of objects that were passed as a parameter in recent method calls and use this information to make an assumption about the type of object that will be passed to a method in the future. If V8 can make a good assumption in the future calls it can bypass the process of figuring out how to access to the object properties and instead use the stored information to point directly to the object hidden class.
+
+Also, V8 after two successful calls of the same method to the same hidden class, will be omit the hidden class lookup and jumps directly into the memory address for a specific property.
+
+**References**
+
+- [How JavaScript works: inside the V8 engine + 5 tips on how to write optimized code](https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e)
