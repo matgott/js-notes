@@ -3,67 +3,71 @@
 ---
 
 - [lesson-90 - Javascript Engine](#lesson-90---javascript-engine)
-    - [Runtime](#runtime)
+  - [Runtime](#runtime)
 - [lesson-92 - Scope](#lesson-92---scope)
-    - [Block Scope](#block-scope)
-    - [Function Scope/Local Scope](#function-scopelocal-scope)
-    - [Module Scope](#module-scope)
-    - [Global Scope](#global-scope)
-    - [Lexical Scope](#lexical-scope)
+  - [Block Scope](#block-scope)
+  - [Function Scope/Local Scope](#function-scopelocal-scope)
+  - [Module Scope](#module-scope)
+  - [Global Scope](#global-scope)
+  - [Lexical Scope](#lexical-scope)
 - [lesson-94 - Hoisting](#lesson-94---hoisting)
 - [lesson-91 - Execution Context](#lesson-91---execution-context)
-    - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
-    - [Execution Context](#execution-context)
+  - [Execution Context Stack / Call Stack](#execution-context-stack--call-stack)
+  - [Execution Context](#execution-context)
 - [lesson-96 - The this keyword](#lesson-96---the-this-keyword)
 - [lesson-99 - Primitives vs Object](#lesson-99---primitives-vs-object)
-    - [Primitives](#primitives)
-    - [Objects](#objects)
+  - [Primitives](#primitives)
+  - [Objects](#objects)
 - [lesson-10 - Values and Variables](#lesson-10---values-and-variables)
 - [lesson-12 - Data Types](#lesson-12---data-types)
 - [lesson-13 - let, const and var](#lesson-13---let-const-and-var)
 - [lesson-20 - Type Conversion and Coercion](#lesson-20---type-conversion-and-coercion)
 - [lesson-21 - Truthy and Falsy Values](#lesson-21---truthy-and-falsy-values)
 - [Nullish value](#nullish-value)
-    - [Null vs Undefined](#null-vs-undefined)
+  - [Null vs Undefined](#null-vs-undefined)
 - [lesson-22 - Equality Operators: == vs ===](#lesson-22---equality-operators--vs-)
 - [lesson-27 - Statements & Expressions](#lesson-27---statements--expressions)
 - [lesson-30 - JavaScript Releases](#lesson-30---javascript-releases)
 - [lesson-32 - Strict Mode](#lesson-32---strict-mode)
 - [lesson-33-34 - Functions](#lesson-33-34---functions)
-    - [Closure](#closure)
+  - [Closure](#closure)
 - [lesson-103-104 - Destructuring](#lesson-103-104---destructuring)
-    - [Array](#array)
-    - [Objects](#objects-1)
+  - [Array](#array)
+  - [Objects](#objects-1)
 - [lesson-105 - Spread Operator](#lesson-105---spread-operator)
 - [lesson-106 - Rest Syntax](#lesson-106---rest-syntax)
 - [lesson-107 - Short Circuiting (|| - &&)](#lesson-107---short-circuiting----)
-    - [OR (||)](#or-)
-    - [AND (&&)](#and-)
+  - [OR (||)](#or-)
+  - [AND (&&)](#and-)
 - [lesson-108 - Nullish Coalescing Operator (??)](#lesson-108---nullish-coalescing-operator-)
 - [Optional Chaining (?)](#optional-chaining-)
 - [lesson-115 - Sets](#lesson-115---sets)
-    - [Examples](#examples)
-    - [Practical cases:](#practical-cases)
+  - [Examples](#examples)
+  - [Practical cases:](#practical-cases)
 - [lesson-116-117 - Maps](#lesson-116-117---maps)
-    - [Examples](#examples-1)
-    - [Iteration](#iteration)
+  - [Examples](#examples-1)
+  - [Iteration](#iteration)
 - [lesson-118 - Which Data Structure to Use](#lesson-118---which-data-structure-to-use)
-    - [Arrays or Sets](#arrays-or-sets)
-    - [Objects or Maps](#objects-or-maps)
+  - [Arrays or Sets](#arrays-or-sets)
+  - [Objects or Maps](#objects-or-maps)
 - [lesson-203 - OOP](#lesson-203---oop)
-    - [Classes](#classes)
-    - [Instance](#instance)
-    - [How do we design classes?](#how-do-we-design-classes)
+  - [Classes](#classes)
+  - [Instance](#instance)
+  - [How do we design classes?](#how-do-we-design-classes)
 - [lesson-204 - OOP in Javascript](#lesson-204---oop-in-javascript)
-    - [lesson-205-206-207 Prototype](#lesson-205-206-207-prototype)
-    - [How do we implement OOP in Javascript?](#how-do-we-implement-oop-in-javascript)
-    - [`new` Operator](#new-operator)
-    - [Prototyping](#prototyping)
-    - [Prototype Chain](#prototype-chain)
-    - [lessson-210-211-212 - ES6 Classes](#lessson-210-211-212---es6-classes)
-      - [Getters & Setters](#getters--setters)
-      - [Static Methods](#static-methods)
-    - [Object.create](#objectcreate)
+  - [lesson-205-206-207 Prototype](#lesson-205-206-207-prototype)
+  - [How do we implement OOP in Javascript?](#how-do-we-implement-oop-in-javascript)
+  - [`new` Operator](#new-operator)
+  - [Prototyping](#prototyping)
+  - [Prototype Chain](#prototype-chain)
+  - [lessson-210-211-212 - ES6 Classes](#lessson-210-211-212---es6-classes)
+    - [Getters & Setters](#getters--setters)
+    - [Static Methods](#static-methods)
+  - [Object.create](#objectcreate)
+- [Memory Lifecycle & Garbage Collector (GC)](#memory-lifecycle--garbage-collector-gc)
+  - [Garbage Collection Stragegies](#garbage-collection-stragegies)
+    - [Reference Counting](#reference-counting)
+    - [Mark-and-sweep](#mark-and-sweep)
 
 ---
 
@@ -1246,3 +1250,59 @@ The difference with the `New` operator is that `Object.create` does not call any
     const me = Object.create(PersonProto);
     me.init("Matias", 25);
     me.sayName(); // My name is Matias
+
+---
+
+## Memory Lifecycle & Garbage Collector (GC)
+
+Allocate - Use It - Release
+
+![Lifecycle](https://d33wubrfki0l68.cloudfront.net/d0de55d38df07ec31e319d9383230d50bec26f0d/94fa2/images/blog/2020-10/figure1.png)
+
+In Javascript the `allocation` and `deallocation` phases are autoamtic.
+
+Javascript `allocate` space when new variables are created, and when the memory is no longer being used, respecting the language limitations in terms of `scopes`, the memory is released.
+
+#### Garbage Collection Stragegies
+
+##### Reference Counting
+
+All allocated resources have a counter of references pointing to them. Whenever a resource has no references pointing to it anymore, then it is automatically collected.
+
+    const bar = {
+        name: "bar"
+    };
+
+    bar = "";
+
+> When the object created loses its reference then can be garbage collected.
+
+** Circular References **
+
+    function f() {
+        const bar = {};
+        const foo = {};
+        bar.name = foo;
+        foo.name = bar;
+
+        return 'azerty';
+    }
+
+In this case, two objects are created with properties that reference one another, creating a cycle. Whe the function return they will go out of scope and become unneeded and ther allocated memory should be reclaimed, but since wach of the two objects has al least one refrences pointing to them, neither of them beign marked for `GC`.
+
+##### Mark-and-sweep
+
+Root object -> child object -> Reference
+
+![mark-and-sweep](https://d33wubrfki0l68.cloudfront.net/eff15dde3b4a6db32945c32b8b04047bc9ec9b8a/47eba/images/blog/2020-10/figure2.png)
+
+This algorithm reduces the definition of `an object is no longer needed` to `an object is unreachable`.
+
+Starting from the `roots objects` (in Javascript is the `global object`), the GC will find all `reachable` objects and collect all `non-reachable` objects.
+
+The algorith will go a couple of times, from the root to the bottom objects `marking` all the objects that area reachable (to be ignored) and `sweeping` from memory at the end of the process, the ones that are not.
+
+**References**
+
+- [JavaScript Internals: Garbage Collection](https://blog.appsignal.com/2020/10/21/garbage-collection-in-javascript.html)
+- [A Deep Dive Into V8](https://blog.appsignal.com/2020/07/01/a-deep-dive-into-v8.html)
